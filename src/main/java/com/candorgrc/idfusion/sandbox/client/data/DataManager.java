@@ -2,6 +2,7 @@ package com.candorgrc.idfusion.sandbox.client.data;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.candorgrc.idfusion.sandbox.client.jsinterop.JSON;
@@ -166,14 +167,22 @@ public final class DataManager {
 	 * @param rangeSize
 	 * @return
 	 */
-	public List<PersonJSO> fetchPersons(int offset, int rangeSize) {
+	public List<PersonJSO> fetchPersons(int offset, int rangeSize, Predicate<PersonJSO> filter) {
 		//@formatter:off
 		return MOCK_DATA.stream()
 							.skip(offset == 0 ? offset 
 											  : offset * rangeSize - 1)
+								.filter(filter)
 								.limit(rangeSize)
 									.collect(Collectors.toList());
 		//@formatter:on
 	}
-
+	
+	public long countFetchPersons(Predicate<PersonJSO> filter) {
+		//@formatter:off
+		return MOCK_DATA.stream()
+								.filter(filter)
+								.count();
+		//@formatter:on
+	}
 }

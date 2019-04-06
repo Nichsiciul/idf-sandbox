@@ -1,6 +1,7 @@
 package com.candorgrc.idfusion.sandbox.client.view.impl;
 
 import com.candorgrc.idfusion.sandbox.client.datapresentation.PersonCellList;
+import com.candorgrc.idfusion.sandbox.client.filter.Filter;
 import com.candorgrc.idfusion.sandbox.client.presenter.PersonPresenter;
 import com.candorgrc.idfusion.sandbox.client.view.PersonView;
 import com.google.gwt.core.client.GWT;
@@ -17,7 +18,7 @@ import elemental2.dom.HTMLButtonElement;
  */
 public class PersonViewImpl extends Composite implements PersonView {
 
-	private static PersonViewImplUiBinder uiBinder = GWT.create(PersonViewImplUiBinder.class);
+	public static PersonViewImplUiBinder uiBinder = GWT.create(PersonViewImplUiBinder.class);
 
 	interface PersonViewImplUiBinder extends UiBinder<HTMLPanel, PersonViewImpl> {
 	}
@@ -33,10 +34,13 @@ public class PersonViewImpl extends Composite implements PersonView {
 	@UiField
 	protected PersonCellList personList;
 
+	@UiField
+	protected Filter filter;
+
 	/**
 	 * Because this class has a default constructor, it can be used as a binder
-	 * template. In other words, it can be used in other *.ui.xml files as
-	 * follows: <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g=
+	 * template. In other words, it can be used in other *.ui.xml files as follows:
+	 * <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g=
 	 * "urn:import:**user's package**" >
 	 * <g:**UserClassName**>Hello!</g:**UserClassName> </ui:UiBinder> Note that
 	 * depending on the widget that is used, it may be necessary to implement
@@ -52,7 +56,8 @@ public class PersonViewImpl extends Composite implements PersonView {
 	}
 
 	private void addEventHandlers() {
-		toggle.addEventListener("click", event -> personList.setStyleName("grid-view" == personList.getStyleName() ? "table-view" : "grid-view"));
+		toggle.addEventListener("click", event -> personList
+				.setStyleName("grid-view" == personList.getStyleName() ? "table-view" : "grid-view"));
 		reset.addEventListener("click", event -> presenter.onResetEvent());
 		fetch.addEventListener("click", event -> presenter.onFetchEvent());
 		apply.addEventListener("click", event -> presenter.onSearchEvent());
@@ -68,4 +73,14 @@ public class PersonViewImpl extends Composite implements PersonView {
 	public PersonCellList getPersonList() {
 		return personList;
 	}
+
+	@Override
+	public HTMLButtonElement getFetch() {
+		return fetch;
+	}
+
+	public Filter getFilter() {
+		return filter;
+	}
+
 }

@@ -1,8 +1,8 @@
 package com.candorgrc.idfusion.sandbox.client.presenter.impl;
 
+import com.candorgrc.idfusion.sandbox.client.filter.Filter;
 import com.candorgrc.idfusion.sandbox.client.presenter.PersonPresenter;
 import com.candorgrc.idfusion.sandbox.client.view.PersonView;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasOneWidget;
 import com.google.inject.Inject;
 
@@ -47,21 +47,25 @@ public class PersonPresenterImpl implements PersonPresenter {
 
 	@Override
 	public void onSearchEvent() {
-		Window.alert("Search event fired...now imagine that the list just got filtered :-)");
+//		Window.alert("Search event fired...now imagine that the list just got filtered :-)");
+		view.getPersonList().refreshWith(Filter.toPredicate(view.getFilter()));
+
+		view.getFetch().disabled = view.getPersonList().isEof();
 	}
 
 	@Override
 	public void onFetchEvent() {
 		/*
-		 * trigger onRangeChanged in order to fetch a new chunk/page of data and
-		 * append it to the existing stream of {@link PersonJSO}
+		 * trigger onRangeChanged in order to fetch a new chunk/page of data and append
+		 * it to the existing stream of {@link PersonJSO}
 		 */
 		view.getPersonList().nextRange();
+		view.getFetch().disabled = view.getPersonList().isEof();
 	}
 
 	@Override
 	public void onResetEvent() {
-		view.getPersonList().resetVisibleRangeAndClearData();
+		view.getPersonList().refreshWith(null);
 	}
 
 }
